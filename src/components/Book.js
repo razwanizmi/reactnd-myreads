@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import shelfNames from "../utils/shelfNames";
 
-const Book = ({ book, shelves }) => {
+const Book = ({ book }) => {
   return (
     <li>
       <div className="book">
@@ -19,9 +20,9 @@ const Book = ({ book, shelves }) => {
               <option value="none" disabled>
                 Move to...
               </option>
-              {Object.keys(shelves).map(shelf => (
-                <option key={shelf} value={shelf}>
-                  {shelves[shelf]}
+              {Object.keys(shelfNames).map(keyName => (
+                <option key={keyName} value={keyName}>
+                  {shelfNames[keyName]}
                 </option>
               ))}
               <option value="none">None</option>
@@ -34,10 +35,8 @@ const Book = ({ book, shelves }) => {
     </li>
   );
 };
-
 Book.propTypes = {
-  book: PropTypes.object.isRequired,
-  shelves: PropTypes.object.isRequired
+  book: PropTypes.object.isRequired
 };
 
 export default Book;
