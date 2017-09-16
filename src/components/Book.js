@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import shelfNames from "../utils/shelfNames";
 
 const Book = ({ book, updateBook }) => {
+  const noCoverLink = "https://i.imgur.com/vzUcRvF.jpg";
+
   const handleChange = e => {
     const shelf = e.target.value;
 
@@ -18,14 +20,13 @@ const Book = ({ book, updateBook }) => {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${book.imageLinks.thumbnail})`
+              backgroundImage: `url(${book.imageLinks !== undefined
+                ? book.imageLinks.thumbnail
+                : noCoverLink})`
             }}
           />
           <div className="book-shelf-changer">
-            <select
-              value={book.shelf}
-              onChange={handleChange}
-            >
+            <select value={book.shelf} onChange={handleChange}>
               <option value="none" disabled>
                 Move to...
               </option>
