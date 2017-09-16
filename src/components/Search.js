@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import Book from "./Book";
 import * as BooksAPI from "../utils/BooksAPI";
 
 class Search extends Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    updateBook: PropTypes.func.isRequired
+  };
+
   state = {
     term: "",
-    books: []
+    results: []
   };
 
   handleChange = event => {
@@ -18,19 +24,24 @@ class Search extends Component {
 
   searchTerm = term => {
     if (term === "") {
-      return this.setState({ books: [] });
+      return this.setState({ results: [] });
     }
 
-    BooksAPI.search(term).then(books => {
-      if (Array.isArray(books)) {
-        return this.setState({ books });
+    BooksAPI.search(term).then(results => {
+      if (Array.isArray(results)) {
+        return this.setState({ results });
       }
-      this.setState({ books: [] });
+      this.setState({ results: [] });
     });
   };
 
+  handleUpdate = (book, shelf) => {
+    this.props.updateBook(book, shelf);
+    this.props.history.push({ pathname: "/" });
+  };
+
   render() {
-    const { term, books } = this.state;
+    const { term, results } = this.state;
 
     return (
       <div className="search-books">
@@ -49,7 +60,9 @@ class Search extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {books.map(book => <Book key={book.id} book={book} />)}
+            {results.map(book => (
+              <Book key={book.id} book={book} updateBook={this.handleUpdate} />
+            ))}
           </ol>
         </div>
       </div>

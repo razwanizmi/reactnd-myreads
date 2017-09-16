@@ -11,19 +11,26 @@ class BooksApp extends Component {
     loading: true
   };
 
-  updateCurrent = (book, shelf) => {
+  updateBook = (book, shelf) => {
     this.setState({ loading: true });
 
     BooksAPI.update(book, shelf).then(() =>
       this.setState(prevState => {
         const books = prevState.books
-          .filter(b => b.shelf !== "none")
           .map(b => {
             if (b === book) {
               b.shelf = shelf;
             }
             return b;
-          });
+          })
+          .filter(b => b.shelf !== "none");
+
+        const booksId = books.map(b => b.id);
+
+        if (shelf !== "none" && booksId.indexOf(book.id) === -1) {
+          book.shelf = shelf;
+          return { books: [...books, book], loading: false }
+        }
 
         return { books, loading: false };
       })
@@ -46,11 +53,20 @@ class BooksApp extends Component {
             <Main
               books={books}
               loading={loading}
-              updateBook={this.updateCurrent}
+              updateBook={this.updateBook}
             />
           )}
         />
-        <Route path="/search" component={Search} />
+        <Route
+          path="/search"
+          render={({ history }) => (
+            <Search
+              books={books}
+              updateBook={this.updateBook}
+              history={history}
+            />
+          )}
+        />
       </div>
     );
   }
