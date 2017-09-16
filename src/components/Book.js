@@ -35,7 +35,9 @@ const Book = ({ book, updateBook }) => {
                   {shelfNames[keyName]}
                 </option>
               ))}
-              {book.shelf && <option value="none">None</option>}
+              {book.shelf && book.shelf !== "none" &&
+                <option value="none">None</option>
+              }
             </select>
           </div>
         </div>

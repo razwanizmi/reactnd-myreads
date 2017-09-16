@@ -39,7 +39,6 @@ class Search extends Component {
 
   handleUpdate = (book, shelf) => {
     this.props.updateBook(book, shelf);
-    this.props.history.push({ pathname: "/" });
   };
 
   render() {
