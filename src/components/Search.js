@@ -28,6 +28,8 @@ class Search extends Component {
     }
 
     BooksAPI.search(term).then(results => {
+      // Sometimes the API returns us {error: "empty query", items: Array(0)}
+      // Ignoring this and rescuing with empty array instead
       if (Array.isArray(results)) {
         return this.setState({ results });
       }
@@ -42,6 +44,16 @@ class Search extends Component {
 
   render() {
     const { term, results } = this.state;
+    const { books } = this.props;
+
+    const resultsWithShelf = results.map(result => {
+      books.forEach(book => {
+        if (book.id === result.id) {
+          result.shelf = book.shelf;
+        }
+      });
+      return result;
+    });
 
     return (
       <div className="search-books">
@@ -60,8 +72,8 @@ class Search extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {results.map(book => (
-              <Book key={book.id} book={book} updateBook={this.handleUpdate} />
+            {resultsWithShelf.map(result => (
+              <Book key={result.id} book={result} updateBook={this.handleUpdate} />
             ))}
           </ol>
         </div>

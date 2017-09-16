@@ -17,21 +17,25 @@ class BooksApp extends Component {
     BooksAPI.update(book, shelf).then(() =>
       this.setState(prevState => {
         const books = prevState.books
+          // Change shelf if an existing book is selected
           .map(b => {
-            if (b === book) {
+            if (b.id === book.id) {
               b.shelf = shelf;
             }
             return b;
           })
+          // Remove book if shelf changed to none
           .filter(b => b.shelf !== "none");
 
         const booksId = books.map(b => b.id);
 
+        // Handler when new book is added (don't add book when shelf is none)
         if (shelf !== "none" && booksId.indexOf(book.id) === -1) {
           book.shelf = shelf;
-          return { books: [...books, book], loading: false }
+          return { books: [...books, book], loading: false };
         }
 
+        // Handler when existing book is modified
         return { books, loading: false };
       })
     );
