@@ -11,6 +11,25 @@ class BooksApp extends Component {
     loading: true
   };
 
+  updateCurrent = (book, shelf) => {
+    this.setState({ loading: true });
+
+    BooksAPI.update(book, shelf).then(() =>
+      this.setState(prevState => {
+        const books = prevState.books
+          .filter(b => b.shelf !== "none")
+          .map(b => {
+            if (b === book) {
+              b.shelf = shelf;
+            }
+            return b;
+          });
+
+        return { books, loading: false };
+      })
+    );
+  };
+
   componentDidMount() {
     BooksAPI.getAll().then(books => this.setState({ books, loading: false }));
   }
@@ -23,7 +42,13 @@ class BooksApp extends Component {
         <Route
           exact
           path="/"
-          render={() => <Main books={books} loading={loading} />}
+          render={() => (
+            <Main
+              books={books}
+              loading={loading}
+              updateBook={this.updateCurrent}
+            />
+          )}
         />
         <Route path="/search" component={Search} />
       </div>

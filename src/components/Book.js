@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import shelfNames from "../utils/shelfNames";
 
-const Book = ({ book }) => {
+const Book = ({ book, updateBook }) => {
+  const handleChange = e => {
+    const shelf = e.target.value;
+
+    updateBook(book, shelf);
+  };
+
   return (
     <li>
       <div className="book">
@@ -16,7 +22,10 @@ const Book = ({ book }) => {
             }}
           />
           <div className="book-shelf-changer">
-            <select value={book.shelf}>
+            <select
+              value={book.shelf}
+              onChange={handleChange}
+            >
               <option value="none" disabled>
                 Move to...
               </option>
@@ -38,7 +47,8 @@ const Book = ({ book }) => {
   );
 };
 Book.propTypes = {
-  book: PropTypes.object.isRequired
+  book: PropTypes.object.isRequired,
+  updateBook: PropTypes.func.isRequired
 };
 
 export default Book;
