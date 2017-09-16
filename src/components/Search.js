@@ -18,17 +18,15 @@ class Search extends Component {
 
   searchTerm = term => {
     if (term === "") {
-      this.setState({ books: [] });
+      return this.setState({ books: [] });
     }
 
-    if (term !== "") {
-      BooksAPI.search(term).then(books => {
-        if (Array.isArray(books)) {
-          return this.setState({ books });
-        }
-        this.setState({ books: [] });
-      });
-    }
+    BooksAPI.search(term).then(books => {
+      if (Array.isArray(books)) {
+        return this.setState({ books });
+      }
+      this.setState({ books: [] });
+    });
   };
 
   render() {

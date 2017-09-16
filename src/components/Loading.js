@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 
 const styles = {
   content: {
-    textAlign: "center",
-    fontSize: "35px"
+    textAlign: "center"
   }
 };
 
